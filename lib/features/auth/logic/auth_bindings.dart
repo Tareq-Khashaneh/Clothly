@@ -1,0 +1,12 @@
+
+
+import 'package:get/get.dart';
+
+import 'auth_controller.dart';
+
+class AuthBindgins implements Bindings{
+  @override
+  void dependencies() {
+    Get.put(AuthController(),permanent: true);
+  }
+}
