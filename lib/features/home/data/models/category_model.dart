@@ -1,12 +1,11 @@
 
-import 'package:ecommerce_clothing/core/constants/typedef.dart';
+import 'package:clothly/core/constants/typedef.dart';
 
-class Category{
-  final int id;
+class CategoryModel{
+  final String id;
   final String name;
-  final String image;
 
-  Category({required this.id, required this.name, required this.image});
-  factory Category.fromJson(parameters json)
-  => Category(id: json['id'], name: json['name'], image: json['image']);
+  CategoryModel({required this.id, required this.name});
+  factory CategoryModel.fromJson(parameters json)
+  => CategoryModel(id: json['id'].toString(), name: json['title']);
 }

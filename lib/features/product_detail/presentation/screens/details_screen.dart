@@ -65,7 +65,7 @@ class DetailsScreen extends GetView<DetailsController> {
             ),
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 15),
-              child: DetailsProductCard(product: controller.product!,controller: controller,),
+              child: DetailsProductCard(wishlistItem: controller.wishlistItem!,controller: controller,),
             )));
   }
 }

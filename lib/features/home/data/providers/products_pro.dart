@@ -1,5 +1,5 @@
-import 'package:ecommerce_clothing/core/constants/typedef.dart';
-import 'package:ecommerce_clothing/features/home/data/repositories/product_repo.dart';
+import 'package:clothly/core/constants/typedef.dart';
+import 'package:clothly/features/home/data/repositories/product_repo.dart';
 
 import '../models/product_model.dart';
 
@@ -15,6 +15,7 @@ class ProductPro {
         for (var pm in productsMaps) {
           products.add(ProductModel.fromJson(pm));
         }
+        print("products $products");
         return products;
       }
     } catch (e) {
@@ -23,15 +24,13 @@ class ProductPro {
     return [];
   }
 
-  Future<List<ProductModel>> getProductsCategory(
-      {required String category}) async {
+  Future<List<ProductModel>> getProductsForCategory(
+      {required String id}) async {
     try {
-      List data =
-          await _productRepo.getProductsCategory(category: category);
+      List data = await _productRepo.getProductsForCategory(id: id);
       if (data != []) {
         List<ProductModel> products = [];
         for (var pm in data) {
-
           products.add(ProductModel.fromJson(pm));
         }
         return products;
@@ -41,5 +40,25 @@ class ProductPro {
       return [];
     }
     return [];
+  }
+
+  Future<bool> addProductToWishlist({required String productId}) async {
+    try {
+      return await _productRepo.addProductToWishlist(productId: productId);
+    } catch (e) {
+      print("error in ProductRepo  $e");
+    }
+    return false;
+  }
+
+  Future<bool> removeProductFromWishlist({required String productId}) async {
+    try {
+      bool b =
+          await _productRepo.removeProductFromWishlist(productId: productId);
+      return b;
+    } catch (e) {
+      print("error in ProductRepo  $e");
+    }
+    return false;
   }
 }

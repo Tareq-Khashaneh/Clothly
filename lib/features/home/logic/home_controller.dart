@@ -1,165 +1,120 @@
-import 'package:ecommerce_clothing/features/home/data/providers/products_pro.dart';
-import 'package:ecommerce_clothing/features/home/data/repositories/category_repo.dart';
-import 'package:ecommerce_clothing/features/home/data/repositories/product_repo.dart';
-import 'package:ecommerce_clothing/features/service/app_service.dart';
-import 'package:ecommerce_clothing/features/wishlist/logic/wishlist_controller.dart';
+import 'package:clothly/features/auth/data/models/user_model.dart';
+import 'package:clothly/features/auth/logic/auth_controller.dart';
+import 'package:clothly/features/home/data/models/category_model.dart';
+import 'package:clothly/features/home/data/providers/products_pro.dart';
+import 'package:clothly/features/home/data/repositories/category_repo.dart';
+import 'package:clothly/features/home/data/repositories/product_repo.dart';
+import 'package:clothly/features/service/app_service.dart';
+import 'package:clothly/features/wishlist/data/models/wishlist_model.dart';
+import 'package:clothly/features/wishlist/data/providers/wishlist_pro.dart';
+import 'package:clothly/features/wishlist/data/repositories/wishlist_repo.dart';
+import 'package:clothly/features/wishlist/logic/wishlist_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
 import '../../../core/constants/enum_state.dart';
 import '../data/models/product_model.dart';
+import '../data/providers/category_pro.dart';
 
 class HomeController extends GetxController {
+  late UserModel? user;
   late ProductPro _productPro;
-  late CategoryRepo _categoryRepo;
+  late WishlistPro _wishlistPro;
+  late CategoryPro _categoryPro;
   final AppService appService = Get.find();
   late List<ProductModel> products;
   late List<ProductModel> filterProducts;
-  late List<ProductModel> electronicsProducts;
-  late List<ProductModel> jeweleryProducts;
-  late List<ProductModel> menClothingProducts;
-  late List<ProductModel> womenClothingProducts;
-  late List<String> categories;
+  late List<CategoryModel> categories;
   late Status state;
   late Status stateCategories;
-  late int _selectedIndex;
+  late int selectedIndex;
   late TextEditingController searchController;
   final WishlistController wishlistController = Get.find();
+  final AuthController authController = Get.find();
   @override
   void onInit() {
+    super.onInit();
     init();
     getAllCategories();
     getAllProducts();
-    super.onInit();
   }
-
-  init() {
-    searchController = TextEditingController();
-    _selectedIndex = 0;
-    state = Status.loading;
-    stateCategories = Status.loading;
-    products = [];
-    categories = [];
-    _categoryRepo = CategoryRepo(networkService: appService.networkService);
-    _productPro = ProductPro(
-        productRepo: ProductRepo(networkService: appService.networkService));
-  }
-
-  void addToWishlist({required ProductModel product}){
-    wishlistController.wishlist.add(product);
-    print("wish ${wishlistController.wishlist}");
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   Future<void> toggleFavorite({required ProductModel product}) async {
-    product.isFavorite = !product.isFavorite;
-    if (product.isFavorite) {
-      wishlistController.wishlist.add(product);
+    if (!product.isWishlist) {
+      await _productPro.addProductToWishlist(productId: product.id);
+      product.isWishlist = true;
     } else {
-      wishlistController.wishlist.remove(product);
+      await _productPro.removeProductFromWishlist(productId: product.id);
+      product.isWishlist = false;
     }
     update();
-    // await _saveFavorites();
-  }
-  void removeFromWishlist({required ProductModel product}){
-    wishlistController.wishlist.remove(product);
-    print("wish ${wishlistController.wishlist}");
   }
   Future<void> getAllProducts() async {
+    state = Status.loading;
     products = await _productPro.getAllProducts();
+    List<WishlistModel> wishlistItems = await _wishlistPro.getAllWishlistItems();
+    Map<String, bool> wishlistMap = {for (var item in wishlistItems) item.id: true};
+
+    // Mark products as favorite if they exist in the wishlistMap
+    for (var product in products) {
+      product.isWishlist = wishlistMap.containsKey(product.id);
+      print("product is wishlist ${product.isWishlist}");
+    }
     filterProducts = products;
     filterProducts != [] ? state = Status.success : state = Status.failed;
     update();
   }
 
   Future<void> getAllCategories() async {
-    categories = await _categoryRepo.getAllCategories();
-    products != []
-        ? stateCategories = Status.success
-        : stateCategories = Status.failed;
+    stateCategories = Status.loading;
+    categories = await _categoryPro.getAllCategories();
+    categories != [] ? stateCategories = Status.success : Status.failed;
+    print("categories $categories");
     update();
   }
 
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
-  }
-  void search({required var value}) {
-    switch (_selectedIndex) {
-      case 0:
-        filterProducts = products
-            .where((element) => element.title.toLowerCase().contains(value))
-            .toList();
-        break;
-      case 1:
-        filterProducts = electronicsProducts
-            .where((element) => element.title.toLowerCase().contains(value))
-            .toList();
-        break;
-      case 2:
-        filterProducts = jeweleryProducts
-            .where((element) => element.title.toLowerCase().contains(value))
-            .toList();
-        break;
-      case 3:
-        filterProducts = menClothingProducts
-            .where((element) => element.title.toLowerCase().contains(value))
-            .toList();
-        break;
-      case 4:
-        filterProducts = womenClothingProducts
-            .where((element) => element.title.toLowerCase().contains(value))
-            .toList();
-        break;
+
+  void searchProducts(String query, {String? categoryId}) {
+    query = query.toLowerCase();
+    if(query.isEmpty){
+      print("here");
+      filterProducts = products;
     }
-
-    update();
+   filterProducts =  products.where((product) {
+      return product.title!.toLowerCase().contains(query) ;
+      // ||
+          // product.description!.toLowerCase().contains(query);
+    }).toList();
+     print("product $products");
+     update();
   }
 
-  void getProductsCategory({required int index}) async {
+
+  void getProductsForCategory({required String id}) async {
     state = Status.loading;
-    _selectedIndex = index;
     searchController.clear();
     FocusManager.instance.primaryFocus?.unfocus();
-    switch (index) {
-      case 0:
-        filterProducts = await _productPro.getAllProducts();
-        filterProducts != [] ? state = Status.success : state = Status.failed;
-        break;
-      case 1:
-        electronicsProducts =
-            await _productPro.getProductsCategory(category: "electronics");
-        filterProducts = electronicsProducts;
-        filterProducts != []
-            ? state = Status.success
-            : state = Status.failed;
-        break;
-      case 2:
-        jeweleryProducts =
-            await _productPro.getProductsCategory(category: "jewelery");
-        filterProducts = jeweleryProducts;
-        filterProducts != [] ? state = Status.success : state = Status.failed;
-        break;
-      case 3:
-        menClothingProducts =
-            await _productPro.getProductsCategory(category: "men's clothing");
-        filterProducts = menClothingProducts;
-        filterProducts != []
-            ? state = Status.success
-            : state = Status.failed;
-        break;
-
-      case 4:
-        womenClothingProducts =
-            await _productPro.getProductsCategory(category: "women's clothing");
-        filterProducts = womenClothingProducts;
-
-        filterProducts != []
-            ? state = Status.success
-            : state = Status.failed;
-        break;
-    }
-
+    products = await _productPro.getProductsForCategory(id: id);
+    products != [] ? state = Status.success : state = Status.failed;
+    filterProducts = products;
     update();
   }
+  init() {
+    user = appService.currentUser;
+    searchController = TextEditingController();
+    selectedIndex = 0;
+    products = [];
+    categories = [];
+    _categoryPro = CategoryPro(
+        categoryRepo: CategoryRepo(networkService: appService.networkService));
+    _productPro = ProductPro(
+        productRepo: ProductRepo(networkService: appService.networkService));
+    _wishlistPro = WishlistPro(
+        wishlistRepo: WishlistRepo(networkService: appService.networkService));
+  }
+
 }

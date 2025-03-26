@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerce_clothing/core/shared/custom_icon.dart';
-import 'package:ecommerce_clothing/features/product_detail/data/models/cart_product_model.dart';
+import 'package:clothly/core/constants/images.dart';
+import 'package:clothly/core/shared/custom_icon.dart';
+import 'package:clothly/features/product_detail/data/models/cart_product_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,13 +25,10 @@ class CartProductCard extends StatelessWidget {
               BorderRadius.all(Radius.circular(Dimensions.screenHeight * 0.02)),
           // clipper: MyCustomClipper()..getClip(size),
           child: CachedNetworkImage(
-            imageUrl: cartProduct.product.image,
+            imageUrl: cartProduct.wishlistItem.image ?? defaultImage,
             progressIndicatorBuilder: (context, url, downloadProgress) =>
                 CircularProgressIndicator(value: downloadProgress.progress),
-            errorWidget: (context, url, error) => Image.asset(
-              "assets/images/logo.jpg",
-              fit: BoxFit.cover,
-            ),
+
 
             fit: BoxFit.cover, width: 80, // Set width here
             height: 90,
@@ -45,7 +43,7 @@ class CartProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTitle(
-                text: cartProduct.product.title,
+                text: cartProduct.wishlistItem.title!,
                 maxLines: 2,
                 fontSize: 18,
               ),
@@ -53,7 +51,7 @@ class CartProductCard extends StatelessWidget {
                 height: 3,
               ),
               CustomTitle(
-                text: cartProduct.product.category,
+                text: cartProduct.wishlistItem.category!,
                 fontSize: 16,
                 color: AppColors.kSecondColorGrey,
                 fontWeight: FontWeight.w400,
@@ -62,7 +60,7 @@ class CartProductCard extends StatelessWidget {
                 height: 6,
               ),
               CustomTitle(
-                text: "\$${cartProduct.product.price}",
+                text: "\$${cartProduct.wishlistItem.price}",
                 fontSize: 20,
               )
               // Text(""

@@ -1,24 +1,24 @@
 
 
-import 'package:ecommerce_clothing/features/product_detail/data/models/cart_product_model.dart';
+import 'package:clothly/features/product_detail/data/models/cart_product_model.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController{
   final List<CartProductModel> cartProducts = [];
-  void deleteProduct({required CartProductModel product})
+  void deleteProduct({required CartProductModel wishlistItem})
   {
-    cartProducts.remove(product);
+    cartProducts.remove(wishlistItem);
     update();
   }
-  void increaseNumberOfProduct({required CartProductModel product}) {
-   var num = product.number++;
-    product.finalPrice = double.parse(product.product.price) *  num;
+  void increaseNumberOfProduct({required CartProductModel wishlistItem}) {
+   var num = wishlistItem.number++;
+    wishlistItem.finalPrice = double.parse(wishlistItem.wishlistItem.price!) *  num;
     update();
   }
 
-  void decreaseNumberOfProduct({required CartProductModel product}) {
-   var num = product.number != 1 ?  product.number-- :  product.number;
-    product.finalPrice = double.parse(product.product.price) *  num;
+  void decreaseNumberOfProduct({required CartProductModel wishlistItem}) {
+   var num = wishlistItem.number != 1 ?  wishlistItem.number-- :  wishlistItem.number;
+    wishlistItem.finalPrice = double.parse(wishlistItem.wishlistItem.price!) *  num;
     update();
   }
 

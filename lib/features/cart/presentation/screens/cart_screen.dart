@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:ecommerce_clothing/features/cart/logic/cart_controller.dart';
+import 'package:clothly/features/cart/logic/cart_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -45,7 +45,7 @@ class CartScreen extends GetView<CartController> {
                 InkWell(
                   onTap: () => Get.offAllNamed(AppRoutes.homeRoute) ,
                   child: CustomIcon(
-                    image: "assets/icons/arrow-down.svg",
+                    image: "",
                     circleColor: Colors.white,
                     iconColor: AppColors.kMainColorBlack,
                   ),

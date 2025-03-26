@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clothly/core/constants/images.dart';
+import 'package:clothly/features/wishlist/data/models/wishlist_model.dart';
 
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -10,36 +12,28 @@ import '../../logic/wishlist_controller.dart';
 class WishlistProductCard extends StatelessWidget {
   const WishlistProductCard({
     super.key,
-    required this.product,
+    required this.wishlistItem,
     required this.controller,
   });
-  final ProductModel product;
+  final WishlistModel wishlistItem;
   final WishlistController controller;
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB( 18,10, 28,10),
+      padding: const EdgeInsets.fromLTRB(18, 10, 28, 10),
       decoration: BoxDecoration(
           color: AppColors.kSecondColorGrey2,
-          borderRadius:
-          BorderRadius.all(Radius.circular(Dimensions.radius05))),
-
+          borderRadius: BorderRadius.all(Radius.circular(Dimensions.radius05))),
       child: Row(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.all(
                 Radius.circular(Dimensions.screenHeight * 0.02)),
             child: CachedNetworkImage(
-              imageUrl: product.image,
+              imageUrl: wishlistItem.thumbnail ?? defaultImage,
               progressIndicatorBuilder: (context, url, downloadProgress) =>
                   CircularProgressIndicator(value: downloadProgress.progress),
-              errorWidget: (context, url, error) => Image.asset(
-                "assets/images/logo.jpg",
-                fit: BoxFit.cover,
-              ),
-
-              fit: BoxFit.cover, width: 80, // Set width here
-              height: 90,
+              errorWidget: (context, url, error) =>  const Icon(Icons.image_not_supported_outlined,size: 100, color: Colors.grey)
             ),
           ),
           const SizedBox(
@@ -51,24 +45,18 @@ class WishlistProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTitle(
-                  text: product.title,
+                  text: wishlistItem.title!,
                   maxLines: 2,
                   fontSize: 18,
                 ),
                 const SizedBox(
                   height: 3,
                 ),
-                CustomTitle(
-                  text: product.category,
-                  fontSize: 16,
-                  color: AppColors.kSecondColorGrey,
-                  fontWeight: FontWeight.w400,
-                ),
                 const SizedBox(
                   height: 6,
                 ),
                 CustomTitle(
-                  text: "\$${product.price}",
+                  text: "\$${wishlistItem.price}",
                   fontSize: 20,
                 )
                 // Text("")
@@ -80,13 +68,13 @@ class WishlistProductCard extends StatelessWidget {
           ),
           Expanded(
               child: InkWell(
-                onTap: () => controller.removeFromWishList(product: product),
-                child: Icon(
-                            Icons.favorite,
-                            size: Dimensions.screenHeight * 0.035,
-
-                          ),
-              ))
+            onTap: () => controller.removeFromWishList(wishlistItem),
+            child: Icon(
+              Icons.remove,
+              color: Colors.red,
+              size: Dimensions.screenHeight * 0.035,
+            ),
+          ))
         ],
       ),
     );

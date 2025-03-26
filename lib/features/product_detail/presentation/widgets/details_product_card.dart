@@ -1,6 +1,5 @@
-
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clothly/core/constants/images.dart';
 import 'package:expandable_text/expandable_text.dart';
 
 import 'package:flutter/material.dart';
@@ -14,12 +13,13 @@ import '../../../home/data/models/product_model.dart';
 import '../../logic/details_controller.dart';
 
 class DetailsProductCard extends StatelessWidget {
-  const DetailsProductCard({super.key, required this.product, required this.controller});
-  final ProductModel product;
+  const DetailsProductCard(
+      {super.key, required this.wishlistItem, required this.controller});
+  final ProductModel wishlistItem;
   final DetailsController controller;
   @override
   Widget build(BuildContext context) {
-    return  ListView(
+    return ListView(
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Stack(
@@ -27,46 +27,41 @@ class DetailsProductCard extends StatelessWidget {
             ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(30)),
                 child: CachedNetworkImage(
-                  imageUrl: product.image,
-                  progressIndicatorBuilder:
-                      (context, url, downloadProgress) =>
+                  imageUrl: wishlistItem.image ??defaultImage,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
                       CircularProgressIndicator(
                           value: downloadProgress.progress),
-                  errorWidget: (context, url, error) => Image.asset(
-                    "assets/images/logo.jpg",
-                    fit: BoxFit.cover,
-                  ),
+
                   fit: BoxFit.contain,
                   width: 400,
                   height: 400,
                 )),
             Positioned(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15, vertical: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () => Get.back,
-                        child: CustomIcon(
-                          image: "assets/icons/arrow-down.svg",
-                          circleColor: Colors.white,
-                          iconColor: Colors.black,
-                          width: 30.0,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: (){},
-                        child: CustomIcon(
-                          image: "assets/icons/heart_bold.svg",
-                          width: 30.0,
-                        ),
-                      ),
-                    ],
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () => Get.back,
+                    child: CustomIcon(
+                      image: "",
+                      circleColor: Colors.white,
+                      iconColor: Colors.black,
+                      width: 30.0,
+                    ),
                   ),
-                ))
+                  InkWell(
+                    onTap: () {},
+                    child: CustomIcon(
+                      image: "assets/icons/heart_bold.svg",
+                      width: 30.0,
+                    ),
+                  ),
+                ],
+              ),
+            ))
           ],
         ),
         SizedBox(
@@ -77,22 +72,17 @@ class DetailsProductCard extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-               product.title,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                wishlistItem.title!,
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ),
-
           ],
         ),
         SizedBox(
           height: Dimensions.screenHeight * 0.01,
         ),
-
         SizedBox(
           height: Dimensions.screenHeight * 0.01,
         ),
@@ -111,18 +101,16 @@ class DetailsProductCard extends StatelessWidget {
                 Icons.star,
                 color: Colors.amber,
               ),
-              onRatingUpdate: (rating) {
-
-              },
+              onRatingUpdate: (rating) {},
             ),
-            Text("${product.rate.rate} (${product.rate.count} reviews)",style: Theme.of(context).textTheme.bodyLarge,),
+            // Text("${wishlistItem.rate.rate} (${wishlistItem.rate.count} reviews)",style: Theme.of(context).textTheme.bodyLarge,),
           ],
         ),
         SizedBox(
           height: Dimensions.screenHeight * 0.01,
         ),
-        ExpandableText(
-          product.description,
+     if(wishlistItem.description != null)   ExpandableText(
+          wishlistItem.description!,
           expandText: 'show more',
           collapseText: 'show less',
           maxLines: 3,
@@ -131,7 +119,6 @@ class DetailsProductCard extends StatelessWidget {
           linkStyle: const TextStyle(fontWeight: FontWeight.bold),
         ),
         const Divider(),
-
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,50 +133,42 @@ class DetailsProductCard extends StatelessWidget {
                 Row(
                   children: [
                     InkWell(
-                      onTap: (){},
+                      onTap: () {},
                       child: CustomIcon(
                         circleColor: Colors.white,
                         padding: const EdgeInsets.all(15),
                         icon: Text(
                           "S",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall,
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                     ),
                     InkWell(
-                      onTap: (){},
+                      onTap: () {},
                       child: CustomIcon(
                           circleColor: Colors.white,
                           icon: Text(
                             "M",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall,
+                            style: Theme.of(context).textTheme.headlineSmall,
                           )),
                     ),
                     InkWell(
-                      onTap: (){},
+                      onTap: () {},
                       child: CustomIcon(
                         circleColor: Colors.white,
                         icon: Text(
                           "L",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall,
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                     ),
                     InkWell(
-                      onTap: (){},
+                      onTap: () {},
                       child: CustomIcon(
                         circleColor: Colors.white,
                         icon: Text(
                           "XL",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall,
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                     ),
@@ -204,14 +183,15 @@ class DetailsProductCard extends StatelessWidget {
                   "Add",
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     InkWell(
-                      onTap: (){
-
+                      onTap: () {
                         controller.decreaseNumberOfProduct();
                         controller.calculatePriceOfProduct();
                       },
@@ -226,22 +206,20 @@ class DetailsProductCard extends StatelessWidget {
                     SizedBox(
                       width: Dimensions.screenWidth * 0.03,
                     ),
-                    GetBuilder<DetailsController>(
-                      builder: (controller) {
-                        return Text(
-                          controller.number.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .copyWith(fontWeight: FontWeight.w500),
-                        );
-                      }
-                    ),
+                    GetBuilder<DetailsController>(builder: (controller) {
+                      return Text(
+                        controller.number.toString(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(fontWeight: FontWeight.w500),
+                      );
+                    }),
                     SizedBox(
                       width: Dimensions.screenWidth * 0.03,
                     ),
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         controller.increaseNumberOfProduct();
                         controller.calculatePriceOfProduct();
                       },

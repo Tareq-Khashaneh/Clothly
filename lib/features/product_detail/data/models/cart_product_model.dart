@@ -1,11 +1,11 @@
 
 
 
-import 'package:ecommerce_clothing/features/home/data/models/product_model.dart';
+import 'package:clothly/features/home/data/models/product_model.dart';
 
 class CartProductModel{
-  final ProductModel product;
+  final ProductModel wishlistItem;
   late int number;
   late double finalPrice;
-  CartProductModel({required this.product,required this.number,required this.finalPrice});
+  CartProductModel({required this.wishlistItem,required this.number,required this.finalPrice});
 }

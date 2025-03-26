@@ -1,6 +1,6 @@
 
 
-import 'package:ecommerce_clothing/core/constants/typedef.dart';
+import 'package:clothly/core/constants/typedef.dart';
 
 class RateModel {
   final String rate;

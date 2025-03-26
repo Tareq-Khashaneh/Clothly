@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:clothly/core/constants/images.dart';
+import 'package:clothly/features/service/app_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -14,14 +16,16 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  late AppService appService;
   @override
   void initState() {
+
+    super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     Future.delayed(const Duration(milliseconds: 4000)).then((value) {
       Get.offNamed(AppRoutes.authRoute);
     });
-
-    super.initState();
+    appService = Get.find();
   }
 
   @override
@@ -38,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen>
       body: Center(
         child: CircleAvatar(
           radius: Get.size.height * 0.1,
-          backgroundImage: const AssetImage("assets/images/logo.jpg"),
+          backgroundImage: appService.logoImage !=null? NetworkImage(appService.logoImage!) : const AssetImage(defaultImage),
           backgroundColor: Colors.transparent,
         ),
       ),

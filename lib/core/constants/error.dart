@@ -61,7 +61,7 @@ void showSnackBar(String? message,{bool isFail = true,snackPosition =SnackPositi
     snackPosition: snackPosition,
     snackStyle: SnackStyle.FLOATING,
     backgroundColor: isFail ? Colors.red : AppColors.kSecondColorGrey,
-    colorText: AppColors.kMainColorBlack2,
+    // colorText: AppColors.kMainColorBlack2,
     duration: duration ??  const Duration(milliseconds: 3500),
     margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
     padding: const EdgeInsets.only(bottom: 10 ,left: 10.0,right: 10),

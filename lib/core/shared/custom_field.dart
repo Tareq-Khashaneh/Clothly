@@ -7,8 +7,8 @@ class CustomField extends StatefulWidget {
       {super.key,
       required this.prefixIcon,
        this.label,
-      required this.hint,
-      required this.onChanged,
+       this.hint,
+       this.onChanged,
       this.textInputType = TextInputType.text,
       this.isPassword,
         this.controller,
@@ -17,10 +17,10 @@ class CustomField extends StatefulWidget {
   final Widget prefixIcon;
   final TextInputType textInputType;
   final String? label;
-  final String hint;
+  final String? hint;
   final bool isFilled;
   final TextEditingController? controller;
-  final Function(String) onChanged;
+  final Function(String)? onChanged;
   final String? Function(String?)? validator;
 
   late bool? isPassword;
@@ -35,14 +35,6 @@ class _CustomFieldState extends State<CustomField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // CustomTitle(
-        //   text: widget.label,
-        //   fontSize: Dimensions.screenHeight * 0.028,
-        //   fontWeight: FontWeight.w600,
-        // ),
-        // SizedBox(
-        //   height: Dimensions.screenHeight * 0.01,
-        // ),
         TextFormField(
           controller: widget.controller,
           validator: widget.validator,

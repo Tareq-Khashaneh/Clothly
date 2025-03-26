@@ -1,4 +1,4 @@
-import 'package:ecommerce_clothing/features/home/presentation/widgets/product_card.dart';
+import 'package:clothly/features/home/presentation/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/dimensions.dart';
 import '../../data/models/product_model.dart';
@@ -20,9 +20,9 @@ class CustomGridView extends StatelessWidget {
             crossAxisCount: 2),
         itemCount: products.length,
         itemBuilder: (context, index) {
-          ProductModel product =
+          ProductModel wishlistItem =
           products[index];
-          return ProductCard(product: product);
+          return ProductCard(product: wishlistItem);
         });
   }
 }
