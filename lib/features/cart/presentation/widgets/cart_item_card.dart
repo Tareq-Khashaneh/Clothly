@@ -1,19 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clothly/core/constants/images.dart';
 import 'package:clothly/core/shared/custom_icon.dart';
+import 'package:clothly/features/cart/data/models/Cart.dart';
+import 'package:clothly/features/cart/data/models/CartItemRequestModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/dimensions.dart';
 import '../../../../core/shared/custom_title.dart';
-import '../../../details/data/models/cart_product_model.dart';
-
 
 class CartProductCard extends StatelessWidget {
   const CartProductCard(
-      {super.key, required this.cartProduct,});
-  final CartProductModel cartProduct;
+      {super.key, required this.cartItem,});
+  final CartItems cartItem;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -24,7 +24,7 @@ class CartProductCard extends StatelessWidget {
               BorderRadius.all(Radius.circular(Dimensions.screenHeight * 0.02)),
           // clipper: MyCustomClipper()..getClip(size),
           child: CachedNetworkImage(
-            imageUrl: cartProduct.wishlistItem.image ?? defaultImage,
+            imageUrl: cartItem.product.image ?? defaultImage,
             progressIndicatorBuilder: (context, url, downloadProgress) =>
                 CircularProgressIndicator(value: downloadProgress.progress),
 
@@ -42,24 +42,19 @@ class CartProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTitle(
-                text: cartProduct.wishlistItem.title!,
+                text: cartItem.product.title!,
                 maxLines: 2,
                 fontSize: 18,
               ),
               const SizedBox(
                 height: 3,
               ),
-              CustomTitle(
-                text: cartProduct.wishlistItem.category!,
-                fontSize: 16,
-                color: AppColors.kSecondColorGrey,
-                fontWeight: FontWeight.w400,
-              ),
+
               const SizedBox(
                 height: 6,
               ),
               CustomTitle(
-                text: "\$${cartProduct.wishlistItem.price}",
+                text: "\$${cartItem.product.price}",
                 fontSize: 20,
               )
               // Text(""
@@ -90,7 +85,7 @@ class CartProductCard extends StatelessWidget {
                       color: Colors.white,
                     ),
                     Text(
-                      cartProduct.quantity.toString(),
+                      cartItem.quantity.toString(),
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!

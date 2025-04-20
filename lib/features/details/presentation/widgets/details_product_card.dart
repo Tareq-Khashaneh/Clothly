@@ -14,8 +14,8 @@ import '../../logic/details_controller.dart';
 
 class DetailsProductCard extends StatelessWidget {
   const DetailsProductCard(
-      {super.key, required this.wishlistItem, required this.controller});
-  final ProductModel wishlistItem;
+      {super.key, required this.product, required this.controller});
+  final ProductModel product;
   final DetailsController controller;
   @override
   Widget build(BuildContext context) {
@@ -27,15 +27,12 @@ class DetailsProductCard extends StatelessWidget {
             ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(30)),
                 child: CachedNetworkImage(
-                  imageUrl: wishlistItem.image ??defaultImage,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                          value: downloadProgress.progress),
-
-                  fit: BoxFit.contain,
-                  width: 400,
-                  height: 400,
-                )),
+                  imageUrl: product.image ?? defaultImage,
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => Image.asset(defaultImage,fit: BoxFit.cover,),
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),),
             Positioned(
                 child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
@@ -46,17 +43,17 @@ class DetailsProductCard extends StatelessWidget {
                   InkWell(
                     onTap: () => Get.back,
                     child: CustomIcon(
-                      image: "",
+                      icon: const Icon(Icons.arrow_back,color: Colors.black,),
                       circleColor: Colors.white,
-                      iconColor: Colors.black,
-                      width: 30.0,
                     ),
                   ),
                   InkWell(
                     onTap: () {},
                     child: CustomIcon(
-                      image: "assets/icons/heart_bold.svg",
-                      width: 30.0,
+                      circleColor: Colors.white,
+
+                      icon: Icon(   product.isWishlist ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                        color: Colors.red,),
                     ),
                   ),
                 ],
@@ -72,7 +69,7 @@ class DetailsProductCard extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-                wishlistItem.title!,
+                product.title!,
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -103,14 +100,14 @@ class DetailsProductCard extends StatelessWidget {
               ),
               onRatingUpdate: (rating) {},
             ),
-            // Text("${wishlistItem.rate.rate} (${wishlistItem.rate.count} reviews)",style: Theme.of(context).textTheme.bodyLarge,),
+            // Text("${product.rate.rate} (${product.rate.count} reviews)",style: Theme.of(context).textTheme.bodyLarge,),
           ],
         ),
         SizedBox(
           height: Dimensions.screenHeight * 0.01,
         ),
-     if(wishlistItem.description != null)   ExpandableText(
-          wishlistItem.description!,
+     if(product.description != null)   ExpandableText(
+          product.description!,
           expandText: 'show more',
           collapseText: 'show less',
           maxLines: 3,

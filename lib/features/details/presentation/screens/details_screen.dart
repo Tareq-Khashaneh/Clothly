@@ -31,10 +31,7 @@ class DetailsScreen extends GetView<DetailsController> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                  SvgPicture.asset(
-                    "assets/icons/shopping-cart.svg",
-                    width: 40,
-                  ),
+              Icon(Icons.shopping_cart_rounded),
                   Flexible(
                     child: GetBuilder<DetailsController>(
                       builder: (controller) {
@@ -65,7 +62,7 @@ class DetailsScreen extends GetView<DetailsController> {
             ),
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 15),
-              child: DetailsProductCard(wishlistItem: controller.wishlistItem!,controller: controller,),
+              child: DetailsProductCard(product: controller.wishlistItem!,controller: controller,),
             )));
   }
 }

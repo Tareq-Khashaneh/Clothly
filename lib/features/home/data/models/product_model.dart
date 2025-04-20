@@ -1,39 +1,54 @@
-import 'package:clothly/core/constants/typedef.dart';
-import 'package:clothly/features/home/data/models/rate_model.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'product_2.g.dart';
+
+@JsonSerializable()
 class ProductModel {
-  final String id;
+  @JsonKey(name: 'product_id')
+  final int? productId;
   final String? title;
-  final String? price;
-  final String? category;
-  final String? description;
+  final dynamic description;
   final String? image;
+  final int? price;
+  final String? category;
+  final List<Variants>? variants;
+
+  const ProductModel({
+    this.productId,
+    this.title,
+    this.description,
+    this.image,
+    this.price,
+    this.category,
+    this.variants,
+  });
+
+  factory ProductModel.fromJson(Map<String, dynamic> json) =>
+      _$Product2FromJson(json);
+
+  Map<String, dynamic> toJson() => _$Product2ToJson(this);
+}
+
+@JsonSerializable()
+class Variants {
+  @JsonKey(name: 'variant_id')
+  final int? variantId;
   final String? size;
   final String? color;
-  final String? quantity;
-  bool isWishlist;
-  ProductModel({
-    required this.id,
-    required this.title,
-    required this.price,
-    required this.category,
-    required this.description,
-    required this.image,
-    required this.size,
-    required this.color,
-    required this.quantity,
-    this.isWishlist = false,
-    // required this.rate,
+  @JsonKey(name: 'color_hex')
+  final String? colorHex;
+  final int? quantity;
+
+  const Variants({
+    this.variantId,
+    this.size,
+    this.color,
+    this.colorHex,
+    this.quantity,
   });
-  factory ProductModel.fromJson(parameters json) => ProductModel(
-        id: json['id'].toString(),
-        title: json['title'],
-        price: json['price'].toString(),
-        category: json['category_id'].toString(),
-        description: json['description'],
-        image: json['image'],
-        size: json['size'],
-        color: json['color'],
-        quantity: json['stock_quantity'].toString(),
-      );
+
+  factory Variants.fromJson(Map<String, dynamic> json) =>
+      _$VariantsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VariantsToJson(this);
 }
