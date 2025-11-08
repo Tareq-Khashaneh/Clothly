@@ -21,5 +21,4 @@ Rate & Review Integration: Space for feedback and product ratings.
 Custom Navigation Experience: A custom scaffold that optimizes user flow across the app.
 ### 🔧Robust State Management
 Controller & Bindings: Efficient state handling with well-defined bindings for optimal app responsiveness.
-# images link 
-https://t.me/tareq_khashaneh_p
+# images link https://t.me/tareq_khashaneh_p
